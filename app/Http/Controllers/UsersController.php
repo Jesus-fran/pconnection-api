@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRegistrationRequest;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
@@ -14,13 +14,12 @@ class UsersController extends Controller
         return response()->json($users);
     }
 
-    public function Store(Request $request)
+    public function Store(UserRegistrationRequest $request)
     {
-
         $user = new User();
-        $user->email = 'fran@gmail.com';
-        $user->password = '123';
-        $user->username = 'fran';
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->username = $request->username;
         $user->created_at = Carbon::now();
 
         if (!$user->save()) {
