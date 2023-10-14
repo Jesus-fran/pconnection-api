@@ -14,8 +14,9 @@ class UsersController extends Controller
         return response()->json($users);
     }
 
-    public function Store()
+    public function Store(Request $request)
     {
+
         $user = new User();
         $user->email = 'fran@gmail.com';
         $user->password = '123';

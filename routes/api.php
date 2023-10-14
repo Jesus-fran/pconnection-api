@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\UsersController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('rest', UsersController::class)->middleware(['auth:sanctum', 'ability:user']);
+Route::group(['middleware' => ['auth:sanctum', 'ability:user']], function () {
+    Route::apiResource('rest', UsersController::class);
+});
 
 Route::post('register', [UsersController::class, 'store']);
+
