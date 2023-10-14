@@ -23,6 +23,7 @@ class UsersController extends Controller
         $user->password = $request->password;
         $user->username = $request->username;
         $user->created_at = Carbon::now();
+        $user->rol = 'user';
 
         if (!$user->save()) {
             return response()->json(['status' => false]);
@@ -40,7 +41,7 @@ class UsersController extends Controller
         }
 
         $user->tokens()->delete();
-        $token = $user->createToken($user->username, ['user'])->plainTextToken;
+        $token = $user->createToken($user->username, [$user->rol])->plainTextToken;
         return response()->json(['status' => true, 'resp' => $user, 'token' => $token]);
     }
 }
