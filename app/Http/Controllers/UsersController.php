@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserAutenticationRequest;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -25,7 +27,20 @@ class UsersController extends Controller
         if (!$user->save()) {
             return response()->json(['status' => false]);
         }
-        $token = $user->createToken('cadena', ['user'])->plainTextToken;
+        $token = $user->createToken($user->username, ['user'])->plainTextToken;
+        return response()->json(['status' => true, 'resp' => $user, 'token' => $token]);
+    }
+
+    public function Login(UserAutenticationRequest $request)
+    {
+        $user = User::where('email', '=', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['status' => false, 'message' => 'Correo o contraseña invalido']);
+        }
+
+        $user->tokens()->delete();
+        $token = $user->createToken($user->username, ['user'])->plainTextToken;
         return response()->json(['status' => true, 'resp' => $user, 'token' => $token]);
     }
 }
