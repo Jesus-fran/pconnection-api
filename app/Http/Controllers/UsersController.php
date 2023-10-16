@@ -26,10 +26,10 @@ class UsersController extends Controller
         $user->rol = 'user';
 
         if (!$user->save()) {
-            return response()->json(['status' => false]);
+            return response()->json(['status' => false, 'message' => 'Error al registrar']);
         }
         $token = $user->createToken($user->username, ['user'])->plainTextToken;
-        return response()->json(['status' => true, 'resp' => $user, 'token' => $token]);
+        return response()->json(['status' => true, 'message' => 'Registrado correctamente', 'user' => $user, 'token' => $token]);
     }
 
     public function Login(UserAutenticationRequest $request)
@@ -42,6 +42,6 @@ class UsersController extends Controller
 
         $user->tokens()->delete();
         $token = $user->createToken($user->username, [$user->rol])->plainTextToken;
-        return response()->json(['status' => true, 'resp' => $user, 'token' => $token]);
+        return response()->json(['status' => true, 'message' => 'Logueado correctamente', 'user' => $user, 'token' => $token]);
     }
 }
