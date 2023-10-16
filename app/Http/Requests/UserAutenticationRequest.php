@@ -23,11 +23,12 @@ class UserAutenticationRequest extends FormRequest
     {
         return [
             'email' => 'required|email|max:60',
-            'password' => 'required|string|min:6|max:30|regex:/^(?=.*[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])(?=.*\d)(?=.*[@$!%*?&])[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\d@$!%*?&]+$/',
+            'password' => 'required|string|min:6|max:30|regex:/^(?=.*[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])(?=.*\d)(?=.*[@$!%*?&^#/_.;:-])[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\d@$!%*?&^#/_.;:-]+$"/',
         ];
     }
 
-    public function messages(){
+    public function messages()
+    {
         return [
             'email.required' => 'Debe ingresar un correo',
             'email.email' => 'Debe ingresar un correo valido',
