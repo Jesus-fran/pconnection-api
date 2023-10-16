@@ -23,7 +23,7 @@ class UserAutenticationRequest extends FormRequest
     {
         return [
             'email' => 'required|email|max:60',
-            'password' => 'required|string|min:6|max:30|regex:/^(?=.*[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])(?=.*\d)(?=.*[@$!%*?&^#/_.;:-])[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\d@$!%*?&^#/_.;:-]+$"/',
+            'password' => 'required|string|min:6|max:30|regex:/^(?=.*[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])(?=.*\d)(?=.*[@$!%*?&^#\/_.;\s:-])[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\d@$!%*?&^#\/_.;\s:-]+$/',
         ];
     }
 

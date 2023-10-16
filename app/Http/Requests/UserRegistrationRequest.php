@@ -23,7 +23,7 @@ class UserRegistrationRequest extends FormRequest
     {
         return [
             'email' => 'required|email|max:60|unique:users,email',
-            'password' => 'required|string|min:6|max:30|regex:/^(?=.*[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])(?=.*\d)(?=.*[@$!%*?&^#/_.;:-])[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\d@$!%*?&^#/_.;:-]+$"/',
+            'password' => 'required|string|min:6|max:30|regex:/^(?=.*[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])(?=.*\d)(?=.*[@$!%*?&^#\/_.;\s:-])[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\d@$!%*?&^#\/_.;\s:-]+$/',
             'username' => 'required|min:4|max:25|regex:/^[A-Za-záéíóúÁÉÍÓÚñÑ\s]+$/',
         ];
     }
