@@ -20,4 +20,5 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:user']], function () {
 
 Route::post('register', [UsersController::class, 'store']);
 Route::post('login', [UsersController::class, 'Login']);
+Route::post('recovery-password', [UsersController::class, 'recovery-password']);
 
