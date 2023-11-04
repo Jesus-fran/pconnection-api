@@ -9,7 +9,9 @@
 </head>
 
 <body>
-    <h5>PConnection</h5>
+    @section('content')
+        <h2>Bienvenido a Perfect Connection</h2>
+    @show
 </body>
 
 </html>

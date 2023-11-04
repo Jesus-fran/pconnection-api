@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\PasswordRecoveryRequest;
 use App\Http\Requests\UserAutenticationRequest;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -59,6 +61,9 @@ class UsersController extends Controller
 
         try {
             $mail = new PHPMailer(true);
+            $date = Carbon::now();
+            $date->addMinutes(15);
+            $token = $user->createToken($user->username, [$user->rol,], $date)->plainTextToken;
 
             //Configuración del servidor
             $mail->isSMTP();
@@ -76,7 +81,7 @@ class UsersController extends Controller
             //Configuración del contenido del correo
             $mail->isHTML(true);
             $mail->Subject = mb_encode_mimeheader('Recuperación de contraseña', 'UTF-8', 'Q');
-            $mail->Body = "<h1>Hola</h1>";
+            $mail->Body = "<h1>Hola $user->username</h1> <p>http://localhost:8000/api/password/reset?token=$token</p>";
 
             $mail->send();
 
@@ -84,5 +89,29 @@ class UsersController extends Controller
         } catch (Exception $e) {
             return response()->json(['status' => false, 'message' => "Hubo un error al enviar el correo de recuperación"]);
         }
+    }
+
+    public function RecoveryView()
+    {
+        $user = Auth::user();
+        return view('count.recovery_pass', ['username' => $user->username]);
+    }
+
+    public function PasswordResetView()
+    {
+        return view('count.password_reset');
+    }
+
+    public function ChangePasword(ChangePasswordRequest $request)
+    {
+        $user = Auth::user();
+        $userBd = User::where('id_user', '=', $user->id_user)->update(['password' => Hash::make($request->password)]);
+
+        if ($userBd != 1) {
+            return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar la contraseña']);
+        }
+
+        $request->user()->tokens()->delete();
+        return response()->json(['status' => true, 'message' => 'Has cambiado exitosamente tu contraseña, ya puedes volver a la aplicación e iniciar sesión.']);
     }
 }
