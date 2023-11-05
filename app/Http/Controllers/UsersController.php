@@ -81,7 +81,7 @@ class UsersController extends Controller
             //Configuración del contenido del correo
             $mail->isHTML(true);
             $mail->Subject = mb_encode_mimeheader('Recuperación de contraseña', 'UTF-8', 'Q');
-            $mail->Body = "<h1>Hola $user->username</h1> <p>http://localhost:8000/api/password/reset?token=$token</p>";
+            $mail->Body = view('count.email_recovery', ['token' => $token, 'username' => $user->username]);
 
             $mail->send();
 
@@ -112,6 +112,6 @@ class UsersController extends Controller
         }
 
         $request->user()->tokens()->delete();
-        return response()->json(['status' => true, 'message' => 'Has cambiado exitosamente tu contraseña, ya puedes volver a la aplicación e iniciar sesión.']);
+        return response()->json(['status' => true, 'message' => "¡Bien hecho $user->username! ya puedes volver a la aplicación e iniciar sesión con tu nueva contraseña."]);
     }
 }
