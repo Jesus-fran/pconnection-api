@@ -19,6 +19,9 @@ async function verify() {
 async function changePass() {
     const btn = document.getElementById('btn-change-pass');
     btn.setAttribute('disabled', true);
+    btn.style = 'display:none';
+    const spinner = document.getElementById('spinner');
+    spinner.style = 'display:inline-block';
     const params = new URLSearchParams(this.location.search);
     const token = params.get('token');
     const pass = document.getElementById('password').value;
@@ -55,11 +58,19 @@ async function changePass() {
             window.location.href = 'http://localhost:8000/api/error/401';
         }
 
+        if (resp.status == 500) {
+            msgError.innerHTML = 'Hubo un error en el servidor. Intente de nuevo';
+        }
+
+        spinner.style = 'display:none';
+        btn.style = 'display:inline-block';
         btn.removeAttribute('disabled');
     } catch (error) {
         console.debug(error);
         const msgError = document.getElementById('validation');
         msgError.innerHTML = 'Hubo un error al intentar cambiar la contraseña. Intente de nuevo';
+        spinner.style = 'display:none';
+        btn.style = 'display:inline-block';
         btn.removeAttribute('disabled');
     }
 }

@@ -35,9 +35,9 @@
                         </svg></button>
                     <p style="color:salmon; font-weight: 600; display: inline-block; width: 60%" id="validation"></p>
                     <br>
-                    <input type="submit" value="Cambiar contraseña"
-                        style="background-color:#F4B459; color:darkslategray; text-decoration: none; display: inline-block ; border-radius: 5px; padding: 10px; margin-top: 5%; margin-bottom: 50px; width: max-content; font-weight: 600; border: none; cursor: pointer;"
-                        class="btn-change-pass" id="btn-change-pass">
+                    <div class="spinner" id="spinner"></div>
+                    <br>
+                    <input type="submit" value="Cambiar contraseña" class="btn-change-pass" id="btn-change-pass">
                 </form>
             </div>
         </div>
@@ -51,8 +51,44 @@
 
         }
 
+        .btn-change-pass {
+            background-color: #F4B459;
+            color: darkslategray;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 5%;
+            margin-bottom: 50px;
+            width: max-content;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
         .btn-change-pass:hover {
             background-color: orange !important;
+        }
+
+        .spinner {
+            display: none;
+            width: 50px !important;
+            height: 50px !important;
+            border: 5px solid rgba(0, 0, 0, 0.3) !important;
+            border-radius: 50% !important;
+            border-left-color: black !important;
+
+            animation: spin 1s ease infinite !important;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
     <script>
@@ -60,6 +96,13 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             changePass();
+        });
+
+        form.addEventListener("keydown", (evento) => {
+            if (evento.key == "Enter") {
+                evento.preventDefault();
+                return false;
+            }
         });
     </script>
 @endsection
