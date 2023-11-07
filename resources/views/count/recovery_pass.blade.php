@@ -50,6 +50,10 @@
             }
 
         }
+
+        .btn-change-pass:hover {
+            background-color: orange !important;
+        }
     </style>
     <script>
         const form = document.getElementById('form-change-pass');

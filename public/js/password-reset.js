@@ -58,6 +58,9 @@ async function changePass() {
         btn.removeAttribute('disabled');
     } catch (error) {
         console.debug(error);
+        const msgError = document.getElementById('validation');
+        msgError.innerHTML = 'Hubo un error al intentar cambiar la contraseña. Intente de nuevo';
+        btn.removeAttribute('disabled');
     }
 }
 
