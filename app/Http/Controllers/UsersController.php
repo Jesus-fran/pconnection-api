@@ -114,4 +114,13 @@ class UsersController extends Controller
         $request->user()->tokens()->delete();
         return response()->json(['status' => true, 'message' => "¡Bien hecho $user->username! ya puedes volver a la aplicación e iniciar sesión con tu nueva contraseña."]);
     }
+
+    public function currentPlan()
+    {
+        $user = Auth::user();
+        if ($user->token_card == null) {
+            return response()->json(['status' => true, 'message' => 'Datos obtenidos correctamente', 'plan' => $user->plan, 'card' => false]);
+        }
+        return response()->json(['status' => true, 'message' => 'Datos obtenidos correctamente', 'plan' => $user->plan, 'card' => true]);
+    }
 }
