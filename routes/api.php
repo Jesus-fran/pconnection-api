@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -9,6 +10,8 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:user']], function () {
     Route::post('suscribe', [PaymentController::class, 'ToSuscribe'])->name('suscribe');
     Route::get('current-plan', [UsersController::class, 'currentPlan'])->name('current-plan');
     Route::post('cancel-subscription', [PaymentController::class, 'CancelSubscription'])->name('cancel-subscription');
+    Route::post('restaurant/info-basic', [RestaurantController::class, 'getInformationBasic'])->name('info-basic');
+    Route::post('restaurant/update-info-basic', [RestaurantController::class, 'UpdateInformationBasic'])->name('update-info-basic');
 });
 
 //Autentication

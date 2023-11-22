@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PaymentRequest;
+use App\Models\Restaurant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -87,6 +88,11 @@ class PaymentController extends Controller
                 $updated = User::where('id_user', '=', $user->id_user)->update(['token_stripe' => $customer->id, 'token_subscription' => $subscription->id, 'token_card' => $tokenCard, 'plan' => $request->plan]);
                 if ($updated != 1) {
                     return response()->json(['status' => false, 'message' => 'Hubo un error al intentar guardar tu suscripción']);
+                }
+                $restaurant = new Restaurant();
+                $restaurant->id_restaurant = $user->id_user;
+                if (!$restaurant->save()) {
+                    return response()->json(['status' => false, 'message' => 'Hubo un error al intentar crear tu restaurant']);
                 }
                 return response()->json(['status' => true, 'message' => "¡Bien hecho! subscripción completada."]);
             } catch (\Stripe\Exception\CardException $e) {
