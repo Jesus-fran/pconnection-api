@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+  apache:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend_pconnection
+    restart: always
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "80:80"
+    depends_on:
+      - database
+    networks:
+      - backend
+
+  database:
+    image: mysql
+    container_name: mysql_pconnection
+    restart: always
+    volumes:
+      - ./docker/mysql/mysql-data:/var/lib/mysql
+      - ./docker/mysql/pconnection.sql:/docker-entrypoint-initdb.d/pconnection.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: pconnection
+    ports:
+      - "3306:3306"
+    networks:
+      - backend
+networks:
+  backend:
+
