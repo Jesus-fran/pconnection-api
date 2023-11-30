@@ -12,6 +12,9 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:user']], function () {
     Route::post('cancel-subscription', [PaymentController::class, 'CancelSubscription'])->name('cancel-subscription');
     Route::post('restaurant/info-basic', [RestaurantController::class, 'getInformationBasic'])->name('info-basic');
     Route::post('restaurant/update-info-basic', [RestaurantController::class, 'UpdateInformationBasic'])->name('update-info-basic');
+    Route::post('restaurant/create-new-restaurant', [RestaurantController::class, 'CreateRestaurant']);
+    Route::post('restaurant/get-restaurant', [RestaurantController::class, 'getRestaurant']);
+    Route::post('restaurant/delete-restaurant', [RestaurantController::class, 'deleteRestaurant']);
 });
 
 //Autentication

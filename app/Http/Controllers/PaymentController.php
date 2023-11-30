@@ -90,7 +90,7 @@ class PaymentController extends Controller
                     return response()->json(['status' => false, 'message' => 'Hubo un error al intentar guardar tu suscripción']);
                 }
                 $restaurant = new Restaurant();
-                $restaurant->id_restaurant = $user->id_user;
+                $restaurant->id_user = $user->id_user;
                 if (!$restaurant->save()) {
                     return response()->json(['status' => false, 'message' => 'Hubo un error al intentar crear tu restaurant']);
                 }
