@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CancelSubscriptionRequest;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Restaurant;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -50,8 +53,15 @@ class PaymentController extends Controller
             return $message;
         }
 
-        $tokenCard = $request->tokenCard;
+        // Valida si la contraseña es correcta
         $user = Auth::user();
+        $userAutenticated = User::where('email', '=', $user->email)->first();
+
+        if (!$user || !Hash::check($request->password, $userAutenticated->password)) {
+            return response()->json(['status' => false, 'message' => 'Contraseña incorrecta']);
+        }
+
+        $tokenCard = $request->tokenCard;
         $stripe = new \Stripe\StripeClient('sk_test_51K4UY3AIicvw06Nve5Gz2dVSKTDteB2yx8cypfeP83BxT9moLwrJoT1SjOzu77J7yrDV3H7T4jWyeymAs5hGfGe000Wj7Qqykd');
         $id_price = 'none';
 
@@ -89,11 +99,24 @@ class PaymentController extends Controller
                 if ($updated != 1) {
                     return response()->json(['status' => false, 'message' => 'Hubo un error al intentar guardar tu suscripción']);
                 }
-                $restaurant = new Restaurant();
-                $restaurant->id_user = $user->id_user;
-                if (!$restaurant->save()) {
-                    return response()->json(['status' => false, 'message' => 'Hubo un error al intentar crear tu restaurant']);
+
+                // Para actualizar la visibilidad de los restaurants
+                try {
+                    DB::table('restaurants')->where('id_user', $user->id_user)->update(['visibility' => true]);
+                } catch (\Throwable $th) {
+                    return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar la visibilidad de los restaurantes.']);
                 }
+
+                // Para cambiar el rol y los permisos del token
+                $rol = User::where('id_user', '=', $user->id_user)->update(['rol' => "restaurantero"]);
+                if ($rol != 1) {
+                    return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar el rol']);
+                }
+                $ability = DB::table('personal_access_tokens')->where('tokenable_id', $user->id_user)->update(['abilities' => ["restaurantero"]]);
+                if ($ability != 1) {
+                    return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar permisos']);
+                }
+
                 return response()->json(['status' => true, 'message' => "¡Bien hecho! subscripción completada."]);
             } catch (\Stripe\Exception\CardException $e) {
                 // Manejar errores relacionados con la tarjeta (por ejemplo, tarjeta rechazada)
@@ -156,6 +179,24 @@ class PaymentController extends Controller
             if ($updated != 1) {
                 return response()->json(['status' => false, 'message' => 'Hubo un error al intentar guardar tu suscripción']);
             }
+
+            // Para actualizar la visibilidad de los restaurants
+            try {
+                DB::table('restaurants')->where('id_user', $user->id_user)->update(['visibility' => true]);
+            } catch (\Throwable $th) {
+                return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar la visibilidad de los restaurantes.']);
+            }
+
+            // Para cambiar el rol y los permisos del token
+            $rol = User::where('id_user', '=', $user->id_user)->update(['rol' => "restaurantero"]);
+            if ($rol != 1) {
+                return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar el rol']);
+            }
+            $ability = DB::table('personal_access_tokens')->where('tokenable_id', $user->id_user)->update(['abilities' => ["restaurantero"]]);
+            if ($ability != 1) {
+                return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar permisos']);
+            }
+
             return response()->json(['status' => true, 'message' => "¡Bien hecho! subscripción completada."]);
         } catch (\Stripe\Exception\CardException $e) {
             // Manejar errores relacionados con la tarjeta (por ejemplo, tarjeta rechazada)
@@ -166,9 +207,15 @@ class PaymentController extends Controller
         }
     }
 
-    public function cancelSubscription()
+    public function cancelSubscription(CancelSubscriptionRequest $request)
     {
         $user = Auth::user();
+        $userAutenticated = User::where('email', '=', $user->email)->first();
+
+        if (!$user || !Hash::check($request->password, $userAutenticated->password)) {
+            return response()->json(['status' => false, 'message' => 'Contraseña incorrecta']);
+        }
+
         $stripe = new \Stripe\StripeClient('sk_test_51K4UY3AIicvw06Nve5Gz2dVSKTDteB2yx8cypfeP83BxT9moLwrJoT1SjOzu77J7yrDV3H7T4jWyeymAs5hGfGe000Wj7Qqykd');
         // Como ya es un customer, entonces comprueba si tiene una subscripción, si la tiene lo cancela.
         if ($user->token_subscription != null) {
@@ -183,6 +230,24 @@ class PaymentController extends Controller
                 $updated = User::where('id_user', '=', $user->id_user)->update(['token_subscription' => null, 'plan' => "none"]);
                 if ($updated != 1) {
                     return response()->json(['status' => false, 'message' => 'Hubo un error al intentar eliminar tu suscripción']);
+                }
+
+                // Para actualizar la visibilidad de los restaurants
+                try {
+                    DB::table('restaurants')->where('id_user', $user->id_user)->update(['visibility' => false]);
+                } catch (\Throwable $th) {
+                    return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar la visibilidad de los restaurantes.']);
+                }
+
+                // Para actualizar el rol y el permiso del token
+                $rol = User::where('id_user', '=', $user->id_user)->update(['rol' => "user"]);
+
+                if ($rol != 1) {
+                    return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar el rol']);
+                }
+                $ability = DB::table('personal_access_tokens')->where('tokenable_id', $user->id_user)->update(['abilities' => ["user"]]);
+                if ($ability != 1) {
+                    return response()->json(['status' => false, 'message' => 'Hubo un error al intentar cambiar permisos']);
                 }
                 return response()->json(['status' => true, 'message' => "Bien. Tu suscripción se ha cancelado."]);
             } catch (\Throwable $th) {

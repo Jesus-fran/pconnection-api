@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PaymentRequest extends FormRequest
+class CancelSubscriptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,6 @@ class PaymentRequest extends FormRequest
     {
         return [
             'password' => 'required|string|min:6|max:30|regex:/^(?=.*[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])(?=.*\d)(?=.*[@$!%*?&^#\/_.;\s:-])[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\d@$!%*?&^#\/_.;\s:-]+$/',
-            'tokenCard' => 'required',
-            'plan' => 'required',
         ];
     }
 
@@ -36,8 +34,6 @@ class PaymentRequest extends FormRequest
             'password.min' => 'Su contraseña debe tener al menos 6 caracteres',
             'password.max' => 'Su contraseña de debe tener más de 30 caracteres',
             'password.regex' => 'Su contraseña debe tener al menos una letra minúscula o  mayúscula, un número y un caracter especial',
-            'tokenCard.required' => 'Es necesario un token card',
-            'plan.required' => 'Es necesario un plan',
         ];
     }
 }

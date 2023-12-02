@@ -1,8 +1,8 @@
 -- MariaDB dump 10.19  Distrib 10.5.21-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: pconnection
+-- Host: 127.0.0.1    Database: pconnection
 -- ------------------------------------------------------
--- Server version	10.5.21-MariaDB-0+deb11u1
+-- Server version	8.1.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,11 +23,11 @@ DROP TABLE IF EXISTS `calificaciones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `calificaciones` (
-  `id_calificacion` int(11) NOT NULL AUTO_INCREMENT,
-  `calificacion` int(5) NOT NULL,
+  `id_calificacion` int NOT NULL AUTO_INCREMENT,
+  `calificacion` int NOT NULL,
   `created_at` datetime NOT NULL,
-  `id_restaurant` int(11) NOT NULL,
-  `id_user` int(11) NOT NULL,
+  `id_restaurant` int NOT NULL,
+  `id_user` int NOT NULL,
   PRIMARY KEY (`id_calificacion`),
   KEY `calificaciones_FK` (`id_user`),
   KEY `calificaciones_FK_1` (`id_restaurant`),
@@ -53,11 +53,11 @@ DROP TABLE IF EXISTS `comentarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `comentarios` (
-  `id_comment` int(11) NOT NULL AUTO_INCREMENT,
-  `comentario` varchar(100) NOT NULL,
+  `id_comment` int NOT NULL AUTO_INCREMENT,
+  `comentario` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_restaurant` int(11) NOT NULL,
+  `id_user` int NOT NULL,
+  `id_restaurant` int NOT NULL,
   PRIMARY KEY (`id_comment`),
   KEY `comentarios_FK` (`id_user`),
   KEY `comentarios_FK_1` (`id_restaurant`),
@@ -83,13 +83,13 @@ DROP TABLE IF EXISTS `failed_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `failed_jobs` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) NOT NULL,
-  `connection` text NOT NULL,
-  `queue` text NOT NULL,
-  `payload` longtext NOT NULL,
-  `exception` longtext NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -112,10 +112,10 @@ DROP TABLE IF EXISTS `fotos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fotos` (
-  `id_foto` int(11) NOT NULL AUTO_INCREMENT,
+  `id_foto` int NOT NULL AUTO_INCREMENT,
   `foto` blob NOT NULL,
   `created_at` datetime NOT NULL,
-  `id_restaurant` int(11) NOT NULL,
+  `id_restaurant` int NOT NULL,
   PRIMARY KEY (`id_foto`),
   KEY `fotos_FK` (`id_restaurant`),
   CONSTRAINT `fotos_FK` FOREIGN KEY (`id_restaurant`) REFERENCES `restaurants` (`id_restaurant`)
@@ -139,9 +139,9 @@ DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `migrations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) NOT NULL,
-  `batch` int(11) NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -164,8 +164,8 @@ DROP TABLE IF EXISTS `password_reset_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) NOT NULL,
-  `token` varchar(255) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -188,12 +188,12 @@ DROP TABLE IF EXISTS `personal_access_tokens`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `personal_access_tokens` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(255) NOT NULL,
-  `tokenable_id` bigint(20) unsigned NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `token` varchar(64) NOT NULL,
-  `abilities` text DEFAULT NULL,
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint unsigned NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `expires_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -201,7 +201,7 @@ CREATE TABLE `personal_access_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -210,7 +210,7 @@ CREATE TABLE `personal_access_tokens` (
 
 LOCK TABLES `personal_access_tokens` WRITE;
 /*!40000 ALTER TABLE `personal_access_tokens` DISABLE KEYS */;
-INSERT INTO `personal_access_tokens` VALUES (120,'App\\Models\\User',34,'Frank Jesus','5312ee8956335073f50c2e2d4dbb1b4f1fea8664ba709f9fa4302759dc4d6dcd','[\"user\"]','2023-11-22 14:51:08',NULL,'2023-11-22 11:44:04','2023-11-22 14:51:08'),(121,'App\\Models\\User',35,'Jesus Doe','640afc09ac7ef59d5c2038792b5f5daf83dc27b14e0720d209021ddf0181ba3d','[\"user\"]','2023-11-22 19:20:40',NULL,'2023-11-22 14:52:16','2023-11-22 19:20:40');
+INSERT INTO `personal_access_tokens` VALUES (120,'App\\Models\\User',34,'Frank Jesus','5312ee8956335073f50c2e2d4dbb1b4f1fea8664ba709f9fa4302759dc4d6dcd','[\"user\"]','2023-11-22 14:51:08',NULL,'2023-11-22 11:44:04','2023-11-22 14:51:08'),(121,'App\\Models\\User',35,'Jesus Doe','640afc09ac7ef59d5c2038792b5f5daf83dc27b14e0720d209021ddf0181ba3d','[\"user\"]','2023-11-22 19:20:40',NULL,'2023-11-22 14:52:16','2023-11-22 19:20:40'),(129,'App\\Models\\User',36,'Jesús','78f251276042d2b004dbe1241106148d7d0706392c0794e336c70439215405e0','[\"user\"]','2023-12-02 07:45:03',NULL,'2023-12-02 07:42:38','2023-12-02 07:45:03');
 /*!40000 ALTER TABLE `personal_access_tokens` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,11 +222,11 @@ DROP TABLE IF EXISTS `respuestas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `respuestas` (
-  `id_respuesta` int(11) NOT NULL AUTO_INCREMENT,
-  `respuesta` varchar(100) NOT NULL,
+  `id_respuesta` int NOT NULL AUTO_INCREMENT,
+  `respuesta` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `id_user` int(11) NOT NULL,
-  `id_comment` int(11) NOT NULL,
+  `id_user` int NOT NULL,
+  `id_comment` int NOT NULL,
   PRIMARY KEY (`id_respuesta`),
   KEY `respuestas_FK` (`id_user`),
   KEY `respuestas_FK_1` (`id_comment`),
@@ -252,18 +252,19 @@ DROP TABLE IF EXISTS `restaurants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `restaurants` (
-  `id_restaurant` int(11) NOT NULL AUTO_INCREMENT,
-  `restaurant` varchar(100) DEFAULT NULL,
-  `logo` blob DEFAULT NULL,
-  `telefono` varchar(100) DEFAULT NULL,
-  `descripcion` varchar(100) DEFAULT NULL,
-  `tipo` varchar(100) DEFAULT NULL,
-  `ubicacion` varchar(100) DEFAULT NULL,
-  `desc_oferta` varchar(100) DEFAULT NULL,
-  `oferta` blob DEFAULT NULL,
-  PRIMARY KEY (`id_restaurant`),
-  CONSTRAINT `restaurant_FK` FOREIGN KEY (`id_restaurant`) REFERENCES `users` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `id_restaurant` int NOT NULL AUTO_INCREMENT,
+  `restaurant` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `logo` blob,
+  `telefono` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `descripcion` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `tipo` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `ubicacion` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `desc_oferta` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `oferta` blob,
+  `id_user` int NOT NULL,
+  `visibility` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id_restaurant`)
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -283,22 +284,23 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id_user` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(60) NOT NULL,
+  `id_user` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(60) COLLATE utf8mb4_general_ci NOT NULL,
   `password` blob NOT NULL,
-  `username` varchar(50) NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `rol` char(10) NOT NULL,
-  `token_stripe` varchar(20) DEFAULT NULL,
-  `token_subscription` varchar(30) DEFAULT NULL,
-  `token_card` varchar(30) DEFAULT NULL,
-  `plan` enum('none','basicomen','basicoanual','premiummen','premiumanual') NOT NULL DEFAULT 'none',
+  `rol` char(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `token_stripe` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `token_subscription` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `token_card` varchar(30) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `plan` enum('none','basicomen','basicoanual','premiummen','premiumanual') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'none',
+  `verified` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_user`),
   UNIQUE KEY `users_UN` (`email`),
   UNIQUE KEY `token_UN` (`token_stripe`),
   UNIQUE KEY `subs_UN` (`token_subscription`),
   UNIQUE KEY `card_UN` (`token_card`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -307,6 +309,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (36,'chuzzgomez18@gmail.com','$2y$10$BcAPJmKlQ4E1z5aN4tNTt.WucJr1SvynTUrLrH9K9FFUvylR8RzMy','Jesús','2023-11-27 03:44:31','user','cus_P6TU2gdCbsez4H',NULL,'pm_1OIGXUAIicvw06Nv9YVwCQs4','none',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -319,4 +322,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-22  7:40:08
+-- Dump completed on 2023-12-02  2:01:11
