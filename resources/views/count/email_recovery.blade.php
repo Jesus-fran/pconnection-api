@@ -19,7 +19,7 @@
             el siguiente
             botón:</p>
         <div style="width: 100%; text-align: center">
-            <a href="http://localhost:8000/api/password/reset?token={{ $token }}"
+            <a href="https://ec2-35-174-10-33.compute-1.amazonaws.com/api/password/reset?token={{ $token }}"
                 style="background-color:#F4B459; color:darkslategray; text-decoration: none; display: inline-block ; border-radius: 5px; padding: 10px; margin-top: 5%; margin-bottom: 50px; width: max-content; font-weight: 600;"
                 target="_blank">Restablecer
                 contraseña</a>
