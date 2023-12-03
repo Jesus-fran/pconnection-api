@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://ec2-35-174-10-33.compute-1.amazonaws.com'),
+    'url' => env('APP_URL', 'https://4247-35-174-10-33.ngrok-free.app'),
 
     'asset_url' => env('ASSET_URL'),
 
