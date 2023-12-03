@@ -8,7 +8,7 @@ WORKDIR /var/www/html
 COPY docker/certificates/* /etc/ssl/certs/
 
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-RUN a2enmod rewrite ssl
+RUN a2enmod rewrite
 
 # Instala dependencias de Laravel y otras extensiones
 RUN apt-get update && apt-get install -y libzip-dev unzip && docker-php-ext-install pdo pdo_mysql zip && apt-get clean
@@ -24,7 +24,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Exponer el puerto 80 y 443
 EXPOSE 80
-EXPOSE 443
 
 # CMD especifica el comando por defecto que se ejecutará al iniciar el contenedor
 CMD ["apache2-foreground"]
