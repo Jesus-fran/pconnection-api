@@ -1,9 +1,10 @@
+const URL = "https://4247-35-174-10-33.ngrok-free.app";
 
 async function verify() {
     const params = new URLSearchParams(this.location.search);
     const token = params.get('token');
     try {
-        const resp = await fetch('https://4247-35-174-10-33.ngrok-free.app/api/password/reset/verify', {
+        const resp = await fetch(URL + '/api/password/reset/verify', {
             headers: {
                 "Authorization": `Bearer ${token}`,
             },
@@ -26,7 +27,7 @@ async function changePass() {
     const token = params.get('token');
     const pass = document.getElementById('password').value;
     try {
-        const resp = await fetch('https://4247-35-174-10-33.ngrok-free.app/api/password/reset/change', {
+        const resp = await fetch(URL + '/api/password/reset/change', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ async function changePass() {
         }
 
         if (resp.status == 401) {
-            window.location.href = 'https://4247-35-174-10-33.ngrok-free.app/api/error/401';
+            window.location.href = URL + '/api/error/401';
         }
 
         if (resp.status == 500) {
