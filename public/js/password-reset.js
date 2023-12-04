@@ -1,4 +1,4 @@
-const URL = "https://f422-35-174-10-33.ngrok-free.app";
+const URL = "https://1333-35-174-10-33.ngrok-free.app";
 
 async function verify() {
     const params = new URLSearchParams(this.location.search);
