@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateRestaurantRequest;
 use App\Http\Requests\DeleteRestaurantRequest;
+use App\Http\Requests\FilterRestaurantRequest;
 use App\Http\Requests\InformationBasicRequest;
+use App\Http\Requests\SearchRestaurantRequest;
 use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +35,37 @@ class RestaurantController extends Controller
             return response()->json(['status' => false, 'message' => 'Hubo un error al obtener los datos del restaurante.']);
         }
         return response()->json($restaurant);
+    }
+
+    public function getProfileRestaurant(Request $request)
+    {
+        $restaurant = Restaurant::where('id_restaurant', '=', $request->id)->first();
+        if (!$restaurant) {
+            return response()->json(['status' => false, 'message' => 'Hubo un error al obtener los datos del restaurante.']);
+        }
+        return response()->json($restaurant);
+    }
+
+    public function getAllRestaurants()
+    {
+        $restaurants = Restaurant::where('visibility', '=', true)->limit(10)->get();
+        return response()->json($restaurants, 200);
+    }
+
+    public function FilterRestaurants(FilterRestaurantRequest $request)
+    {
+        $restaurants = Restaurant::where('visibility', '=', true)->where('tipo', '=', $request->tipo)->limit(30)->get();
+        return response()->json($restaurants, 200);
+    }
+
+    public function SearchRestaurants(SearchRestaurantRequest $request)
+    {
+        $restaurants = DB::table('restaurants')->where('visibility', '=', true)->where('restaurant', 'like', '%' . $request->busqueda . '%')->limit(30)->get();
+        if (count($restaurants) < 1) {
+            $restaurantsTipo = DB::table('restaurants')->where('visibility', '=', true)->where('tipo', 'like', '%' . $request->busqueda . '%')->where('tipo', 'like', '%' . $request->busqueda . '%')->limit(30)->get();
+            return response()->json($restaurantsTipo, 200);
+        }
+        return response()->json($restaurants, 200);
     }
 
     public function UpdateInformationBasic(InformationBasicRequest $request)

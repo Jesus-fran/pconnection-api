@@ -10,6 +10,10 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:user,restaurantero']], f
     Route::post('suscribe', [PaymentController::class, 'ToSuscribe'])->name('suscribe');
     Route::get('current-plan', [UsersController::class, 'currentPlan'])->name('current-plan');
     Route::post('cancel-subscription', [PaymentController::class, 'CancelSubscription'])->name('cancel-subscription');
+    Route::get('restaurant/get-all-restaurants', [RestaurantController::class, 'getAllRestaurants']);
+    Route::post('restaurant/get-profile-restaurant', [RestaurantController::class, 'getProfileRestaurant']);
+    Route::post('restaurant/get-filter-restaurants', [RestaurantController::class, 'FilterRestaurants']);
+    Route::post('restaurant/get-search-restaurants', [RestaurantController::class, 'SearchRestaurants']);
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'ability:restaurantero']], function () {
