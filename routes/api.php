@@ -14,6 +14,7 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:user,restaurantero']], f
     Route::post('restaurant/get-profile-restaurant', [RestaurantController::class, 'getProfileRestaurant']);
     Route::post('restaurant/get-filter-restaurants', [RestaurantController::class, 'FilterRestaurants']);
     Route::post('restaurant/get-search-restaurants', [RestaurantController::class, 'SearchRestaurants']);
+    Route::post('restaurant/ubicacion', [RestaurantController::class, 'getUbicacion']);
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'ability:restaurantero']], function () {
@@ -23,6 +24,7 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:restaurantero']], functi
     Route::post('restaurant/get-restaurant', [RestaurantController::class, 'getRestaurant']);
     Route::post('restaurant/delete-restaurant', [RestaurantController::class, 'deleteRestaurant']);
     Route::post('restaurant/update-menu', [RestaurantController::class, 'UpdateMenu']);
+    Route::post('restaurant/update-ubicacion', [RestaurantController::class, 'updateUbicacion']);
 });
 
 //Autentication
