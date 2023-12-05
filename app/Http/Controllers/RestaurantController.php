@@ -7,9 +7,11 @@ use App\Http\Requests\DeleteRestaurantRequest;
 use App\Http\Requests\FilterRestaurantRequest;
 use App\Http\Requests\InformationBasicRequest;
 use App\Http\Requests\SearchRestaurantRequest;
+use App\Http\Requests\UbicacionRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use App\Models\Restaurant;
 use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -120,5 +122,39 @@ class RestaurantController extends Controller
             return response()->json(['status' => true, 'message' => 'Todo actualizado.']);
         }
         return response()->json(['status' => true, 'message' => 'Cambios guardados.']);
+    }
+
+    public function updateUbicacion(UbicacionRequest $request)
+    {
+        $user = Auth::user();
+        $infoUbicacion = Restaurant::where('id_user', '=', $user->id_user)->where('id_restaurant', '=', $request->id)->update(['ubicacion' => $request->ubicacion]);
+
+        if ($infoUbicacion != 1) {
+            return response()->json(['status' => true, 'message' => 'Todo actualizado.']);
+        }
+        return response()->json(['status' => true, 'message' => 'Cambios guardados.']);
+    }
+
+    public function getUbicacion(Request $request)
+    {
+        $restaurant = Restaurant::where('id_restaurant', '=', $request->id)->first();
+        if (!$restaurant) {
+            return response()->json(['status' => false, 'message' => 'Hubo un error al obtener los datos del restaurante.']);
+        }
+        // URL de la API o dirección
+        if ($restaurant->ubicacion == null) {
+            $geo = file_get_contents("https://us1.locationiq.com/v1/search?key=pk.cb8d6cfc37b9521161f6a843e73ab8a2&q=" . urlencode("Barrio candelaria Ocosingo Chiapas") . "&format=json");
+            $geo_arr = json_decode($geo);
+            return response()->json($geo_arr);
+        }
+        try {
+            $geo = file_get_contents("https://us1.locationiq.com/v1/search?key=pk.cb8d6cfc37b9521161f6a843e73ab8a2&q=" . urlencode($restaurant->ubicacion) . "&format=json");
+            $geo_arr = json_decode($geo);
+            return response()->json($geo_arr);
+        } catch (\Throwable $th) {
+            $geo = file_get_contents("https://us1.locationiq.com/v1/search?key=pk.cb8d6cfc37b9521161f6a843e73ab8a2&q=" . urlencode("Barrio candelaria Ocosingo Chiapas") . "&format=json");
+            $geo_arr = json_decode($geo);
+            return response()->json($geo_arr);
+        }
     }
 }
