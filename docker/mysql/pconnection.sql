@@ -113,7 +113,7 @@ DROP TABLE IF EXISTS `fotos`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fotos` (
   `id_foto` int NOT NULL AUTO_INCREMENT,
-  `foto` blob NOT NULL,
+  `foto` longblob NOT NULL,
   `created_at` datetime NOT NULL,
   `id_restaurant` int NOT NULL,
   PRIMARY KEY (`id_foto`),
@@ -254,13 +254,13 @@ DROP TABLE IF EXISTS `restaurants`;
 CREATE TABLE `restaurants` (
   `id_restaurant` int NOT NULL AUTO_INCREMENT,
   `restaurant` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `logo` blob,
+  `logo` longblob,
   `telefono` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `descripcion` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `tipo` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `ubicacion` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `desc_oferta` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `oferta` blob,
+  `oferta` longblob,
   `id_user` int NOT NULL,
   `visibility` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id_restaurant`)
@@ -323,4 +323,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-04 16:43:03
+-- Dump completed on 2023-12-04 21:11:22
