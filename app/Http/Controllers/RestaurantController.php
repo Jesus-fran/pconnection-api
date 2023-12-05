@@ -7,6 +7,7 @@ use App\Http\Requests\DeleteRestaurantRequest;
 use App\Http\Requests\FilterRestaurantRequest;
 use App\Http\Requests\InformationBasicRequest;
 use App\Http\Requests\SearchRestaurantRequest;
+use App\Http\Requests\UpdateMenuRequest;
 use App\Models\Restaurant;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -60,12 +61,16 @@ class RestaurantController extends Controller
 
     public function SearchRestaurants(SearchRestaurantRequest $request)
     {
-        $restaurants = DB::table('restaurants')->where('visibility', '=', true)->where('restaurant', 'like', '%' . $request->busqueda . '%')->limit(30)->get();
-        if (count($restaurants) < 1) {
-            $restaurantsTipo = DB::table('restaurants')->where('visibility', '=', true)->where('tipo', 'like', '%' . $request->busqueda . '%')->where('tipo', 'like', '%' . $request->busqueda . '%')->limit(30)->get();
-            return response()->json($restaurantsTipo, 200);
+        $restaurantsMenu = DB::table('restaurants')->where('visibility', '=', true)->where('desc_oferta', 'like', '%' . $request->busqueda . '%')->limit(30)->get();
+        if (count($restaurantsMenu) < 1) {
+            $restaurantsName = DB::table('restaurants')->where('visibility', '=', true)->where('restaurant', 'like', '%' . $request->busqueda . '%')->limit(30)->get();
+            if (count($restaurantsName) < 1) {
+                $restaurantsTipo = DB::table('restaurants')->where('visibility', '=', true)->where('tipo', 'like', '%' . $request->busqueda . '%')->limit(30)->get();
+                return response()->json($restaurantsTipo, 200);
+            }
+            return response()->json($restaurantsName, 200);
         }
-        return response()->json($restaurants, 200);
+        return response()->json($restaurantsMenu, 200);
     }
 
     public function UpdateInformationBasic(InformationBasicRequest $request)
@@ -104,5 +109,16 @@ class RestaurantController extends Controller
             return response()->json(['status' => false, 'message' => 'Hubo un error al eliminar el restaurante.']);
         }
         return response()->json(['status' => true, 'message' => 'Eliminado correctamente.']);
+    }
+
+    public function UpdateMenu(UpdateMenuRequest $request)
+    {
+        $user = Auth::user();
+        $infoMenu = Restaurant::where('id_user', '=', $user->id_user)->where('id_restaurant', '=', $request->id)->update(['oferta' => $request->oferta, 'desc_oferta' => $request->desc_oferta]);
+
+        if ($infoMenu != 1) {
+            return response()->json(['status' => true, 'message' => 'Todo actualizado.']);
+        }
+        return response()->json(['status' => true, 'message' => 'Cambios guardados.']);
     }
 }

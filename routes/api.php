@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth:sanctum', 'ability:restaurantero']], functi
     Route::post('restaurant/create-new-restaurant', [RestaurantController::class, 'CreateRestaurant']);
     Route::post('restaurant/get-restaurant', [RestaurantController::class, 'getRestaurant']);
     Route::post('restaurant/delete-restaurant', [RestaurantController::class, 'deleteRestaurant']);
+    Route::post('restaurant/update-menu', [RestaurantController::class, 'UpdateMenu']);
 });
 
 //Autentication
